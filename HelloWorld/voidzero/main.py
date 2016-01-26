@@ -18,6 +18,14 @@
 #Author:Kartik Jagdale AKA VoidZero
 
 import webapp2
+import cgi
+
+#Escape function to escape html encoding
+def escape_html(s):
+	s = str(s)
+	return cgi.escape(s, quote=True)
+
+
 
 #=====================================================
 #Verification Function
@@ -86,21 +94,28 @@ Hello,
 #% {"month":month, "day":day,"year":year,"error":error}
 
 class MainHandler(webapp2.RequestHandler):
-	def write_form(self, error="", month="", day="", year=""):
-		self.response.out.write(form % {"error": error, "month": month, "day": day, "year": year})
+	def write_form(self,error="",month="Month", day="Day", year="Year"):
+		self.response.out.write(form % {"error": error,
+										"month": escape_html(month),
+										"day": escape_html(day),
+										"year": escape_html(year) 
+										 })
 
 	def get(self):
 		self.write_form()
 
 	def post(self):
-		user_month = valid_month(self.request.get("month"))
+		month = self.request.get("month")
+		user_month = valid_month(month)
 		print user_month
-		user_day = valid_day(self.request.get("day"))
+		day = self.request.get("day")
+		user_day = valid_day(day)
 		print user_day
-		user_year = valid_year(self.request.get("year"))
+		year = self.request.get("year")
+		user_year = valid_year(year)
 		print user_year
 		if not (user_day and user_month and user_year):
-			self.write_form("Thats Not a valid date!!!",user_month,user_day,user_year)
+			self.write_form("Thats Not a valid date!!!",month,day,year)
 		else:
 			self.response.out.write("Thankx!!!Thats a Valid Date!!!")
 		
