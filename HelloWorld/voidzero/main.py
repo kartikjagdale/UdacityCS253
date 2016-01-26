@@ -60,7 +60,7 @@ month_abbrv = dict((m[:3].lower(),m)for m in months)
 
 
 form = """
-Hello  Bro
+Hello,
 <form method = "post">
 <b>What is Your Birthday?</b>
 	<br>
