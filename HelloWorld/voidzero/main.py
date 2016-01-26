@@ -22,37 +22,39 @@ import webapp2
 #=====================================================
 #Verification Function
 
-def valid_day(self,day):
+def valid_day(day):
 	if day and day.isdigit():
 		day = int(day)
 		if(day>=1 and day<=31):
 			return day
 
-def valid_year(self,year):
+def valid_year(year):
 	if year and year.isdigit():
 		year = int(year)
 		if(year>=1900 and year<=2020):
 			return year
 
-months = ['January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December']
-          
-month_abbrv = dict((m[:3].lower(),m)for m in months)
 
-def valid_month(self,month):
+def valid_month(month):
 	if month:
 		short_month = month[:3].lower()
 		return month_abbrv.get(short_month)    
+
+
+months = ['January',
+		  'February',
+		  'March',
+		  'April',
+		  'May',
+		  'June',
+		  'July',
+		  'August',
+		  'September',
+		  'October',
+		  'November',
+		  'December']
+		  
+month_abbrv = dict((m[:3].lower(),m)for m in months)
 
 #======================================================
 
@@ -66,44 +68,46 @@ Hello  Bro
 		<input type = "text" name = "month" value="%(month)s">
 	</label>
 	
-	<lable>Day
+	<label>Day
 		<input type = "text" name = "day" value="%(day)s">
 	<label>
 
-	<lable>Year
+	<label>Year
 		<input type = "text" name = "year" value="%(year)s">
-	</lable>
+	</label>
 
 	<br>
 	<div style="color: red">%(error)s</div>
 <br>
-<input type = "submit">
+	<input type = "submit">
 </form>
 
 """
+#% {"month":month, "day":day,"year":year,"error":error}
+
 class MainHandler(webapp2.RequestHandler):
 	def write_form(self, error="", month="", day="", year=""):
-		self.response.out.write(form % {"error": error})
+		self.response.out.write(form % {"error": error, "month": month, "day": day, "year": year})
 
 	def get(self):
 		self.write_form()
 
 	def post(self):
-		user_month = valid_month(self.request.get('month'))
+		user_month = valid_month(self.request.get("month"))
 		print user_month
-    	user_day = valid_day(self.request.get('day'))
-    	print user_day
-    	user_year = valid_year(self.request.get('year'))
-    	print user_year
-    	if not (user_day and user_month and user_year):
-    		self.write_form("Thats Not a valid date!!!",user_month,user_day,user_year)
-    	else:
-    		self.response.out.write("Thats a Valid Date!!!")
-    	
+		user_day = valid_day(self.request.get("day"))
+		print user_day
+		user_year = valid_year(self.request.get("year"))
+		print user_year
+		if not (user_day and user_month and user_year):
+			self.write_form("Thats Not a valid date!!!",user_month,user_day,user_year)
+		else:
+			self.response.out.write("Thankx!!!Thats a Valid Date!!!")
+		
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
+	('/', MainHandler),
 ], debug=True)
 
 
